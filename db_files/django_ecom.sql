@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Sep 16, 2021 at 07:29 AM
+-- Generation Time: Sep 17, 2021 at 07:27 AM
 -- Server version: 5.7.24
 -- PHP Version: 7.3.23
 
@@ -89,7 +89,11 @@ INSERT INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALU
 (25, 'Can add product model', 7, 'add_productmodel'),
 (26, 'Can change product model', 7, 'change_productmodel'),
 (27, 'Can delete product model', 7, 'delete_productmodel'),
-(28, 'Can view product model', 7, 'view_productmodel');
+(28, 'Can view product model', 7, 'view_productmodel'),
+(29, 'Can add cart model', 8, 'add_cartmodel'),
+(30, 'Can change cart model', 8, 'change_cartmodel'),
+(31, 'Can delete cart model', 8, 'delete_cartmodel'),
+(32, 'Can view cart model', 8, 'view_cartmodel');
 
 -- --------------------------------------------------------
 
@@ -138,6 +142,25 @@ CREATE TABLE `auth_user_user_permissions` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `carts`
+--
+
+CREATE TABLE `carts` (
+  `cart_id` int(11) NOT NULL,
+  `qty` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `carts`
+--
+
+INSERT INTO `carts` (`cart_id`, `qty`, `product_id`) VALUES
+(1, 1, 4);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `django_admin_log`
 --
 
@@ -175,7 +198,8 @@ INSERT INTO `django_content_type` (`id`, `app_label`, `model`) VALUES
 (4, 'auth', 'user'),
 (5, 'contenttypes', 'contenttype'),
 (7, 'products', 'productmodel'),
-(6, 'sessions', 'session');
+(6, 'sessions', 'session'),
+(8, 'shop', 'cartmodel');
 
 -- --------------------------------------------------------
 
@@ -213,7 +237,9 @@ INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
 (16, 'auth', '0011_update_proxy_permissions', '2021-09-16 06:53:29.581841'),
 (17, 'auth', '0012_alter_user_first_name_max_length', '2021-09-16 06:53:29.621735'),
 (18, 'sessions', '0001_initial', '2021-09-16 06:53:29.743412'),
-(19, 'products', '0001_initial', '2021-09-16 07:14:07.745386');
+(19, 'products', '0001_initial', '2021-09-16 07:14:07.745386'),
+(20, 'shop', '0001_initial', '2021-09-17 07:07:55.461951'),
+(21, 'shop', '0002_rename_product_id_cartmodel_product', '2021-09-17 07:14:53.641286');
 
 -- --------------------------------------------------------
 
@@ -244,7 +270,9 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`product_id`, `name`, `price`) VALUES
-(1, 'Manho', 150);
+(3, 'Head Phones', 300),
+(4, 'Toothbrush', 25),
+(5, 'Napkin', 55);
 
 --
 -- Indexes for dumped tables
@@ -294,6 +322,13 @@ ALTER TABLE `auth_user_user_permissions`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `auth_user_user_permissions_user_id_permission_id_14a6b632_uniq` (`user_id`,`permission_id`),
   ADD KEY `auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm` (`permission_id`);
+
+--
+-- Indexes for table `carts`
+--
+ALTER TABLE `carts`
+  ADD PRIMARY KEY (`cart_id`),
+  ADD KEY `carts_product_id_02913eac_fk_products_product_id` (`product_id`);
 
 --
 -- Indexes for table `django_admin_log`
@@ -349,7 +384,7 @@ ALTER TABLE `auth_group_permissions`
 -- AUTO_INCREMENT for table `auth_permission`
 --
 ALTER TABLE `auth_permission`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `auth_user`
@@ -370,6 +405,12 @@ ALTER TABLE `auth_user_user_permissions`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `carts`
+--
+ALTER TABLE `carts`
+  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `django_admin_log`
 --
 ALTER TABLE `django_admin_log`
@@ -379,19 +420,19 @@ ALTER TABLE `django_admin_log`
 -- AUTO_INCREMENT for table `django_content_type`
 --
 ALTER TABLE `django_content_type`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `django_migrations`
 --
 ALTER TABLE `django_migrations`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
@@ -423,6 +464,12 @@ ALTER TABLE `auth_user_groups`
 ALTER TABLE `auth_user_user_permissions`
   ADD CONSTRAINT `auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
   ADD CONSTRAINT `auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`);
+
+--
+-- Constraints for table `carts`
+--
+ALTER TABLE `carts`
+  ADD CONSTRAINT `carts_product_id_02913eac_fk_products_product_id` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`);
 
 --
 -- Constraints for table `django_admin_log`

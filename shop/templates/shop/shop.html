@@ -1,0 +1,23 @@
+{% extends 'ecom/base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <h2 class="text-center" >Shop</h2>
+    <div class="row" >
+        {% for item in list %}
+            <div class="col-md-3">
+                <div class="card" >
+                    <!-- <img src="..." class="card-img-top" alt="..."> -->
+                    <div class="card-body">
+                    <h5 class="card-title">{{ item.name }}</h5>
+                    <p class="card-text">Price: <strong>{{ item.price }}</strong> </p>
+                    <a href="{% url 'shop:buy_now' pk=item.product_id %}" class="btn btn-primary">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
