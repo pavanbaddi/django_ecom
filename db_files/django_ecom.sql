@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Sep 17, 2021 at 07:27 AM
+-- Generation Time: Sep 18, 2021 at 07:13 AM
 -- Server version: 5.7.24
 -- PHP Version: 7.3.23
 
@@ -93,7 +93,15 @@ INSERT INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALU
 (29, 'Can add cart model', 8, 'add_cartmodel'),
 (30, 'Can change cart model', 8, 'change_cartmodel'),
 (31, 'Can delete cart model', 8, 'delete_cartmodel'),
-(32, 'Can view cart model', 8, 'view_cartmodel');
+(32, 'Can view cart model', 8, 'view_cartmodel'),
+(33, 'Can add order model', 9, 'add_ordermodel'),
+(34, 'Can change order model', 9, 'change_ordermodel'),
+(35, 'Can delete order model', 9, 'delete_ordermodel'),
+(36, 'Can view order model', 9, 'view_ordermodel'),
+(37, 'Can add order item model', 10, 'add_orderitemmodel'),
+(38, 'Can change order item model', 10, 'change_orderitemmodel'),
+(39, 'Can delete order item model', 10, 'delete_orderitemmodel'),
+(40, 'Can view order item model', 10, 'view_orderitemmodel');
 
 -- --------------------------------------------------------
 
@@ -151,13 +159,6 @@ CREATE TABLE `carts` (
   `product_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `carts`
---
-
-INSERT INTO `carts` (`cart_id`, `qty`, `product_id`) VALUES
-(1, 1, 4);
-
 -- --------------------------------------------------------
 
 --
@@ -199,7 +200,9 @@ INSERT INTO `django_content_type` (`id`, `app_label`, `model`) VALUES
 (5, 'contenttypes', 'contenttype'),
 (7, 'products', 'productmodel'),
 (6, 'sessions', 'session'),
-(8, 'shop', 'cartmodel');
+(8, 'shop', 'cartmodel'),
+(10, 'shop', 'orderitemmodel'),
+(9, 'shop', 'ordermodel');
 
 -- --------------------------------------------------------
 
@@ -239,7 +242,8 @@ INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
 (18, 'sessions', '0001_initial', '2021-09-16 06:53:29.743412'),
 (19, 'products', '0001_initial', '2021-09-16 07:14:07.745386'),
 (20, 'shop', '0001_initial', '2021-09-17 07:07:55.461951'),
-(21, 'shop', '0002_rename_product_id_cartmodel_product', '2021-09-17 07:14:53.641286');
+(21, 'shop', '0002_rename_product_id_cartmodel_product', '2021-09-17 07:14:53.641286'),
+(22, 'shop', '0003_orderitemmodel_ordermodel', '2021-09-18 07:04:30.289273');
 
 -- --------------------------------------------------------
 
@@ -252,6 +256,51 @@ CREATE TABLE `django_session` (
   `session_data` longtext NOT NULL,
   `expire_date` datetime(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders`
+--
+
+CREATE TABLE `orders` (
+  `order_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `phone` varchar(255) NOT NULL,
+  `address` longtext,
+  `payment_order_id` varchar(255) NOT NULL,
+  `payment_id` varchar(255) NOT NULL,
+  `delivery_desc` longtext
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`order_id`, `name`, `phone`, `address`, `payment_order_id`, `payment_id`, `delivery_desc`) VALUES
+(1, 'Kunal', '8892279412', 'sample addresss', 'pay_HyqCVNcGP31cvz', 'order_HyqBOdrWZPwwtb', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_items`
+--
+
+CREATE TABLE `order_items` (
+  `order_item_id` int(11) NOT NULL,
+  `rate` double NOT NULL,
+  `qty` int(11) NOT NULL,
+  `price` double NOT NULL,
+  `order_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `order_items`
+--
+
+INSERT INTO `order_items` (`order_item_id`, `rate`, `qty`, `price`, `order_id`, `product_id`) VALUES
+(1, 25, 1, 25, 1, 4);
 
 -- --------------------------------------------------------
 
@@ -359,6 +408,20 @@ ALTER TABLE `django_session`
   ADD KEY `django_session_expire_date_a5c62663` (`expire_date`);
 
 --
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`order_id`);
+
+--
+-- Indexes for table `order_items`
+--
+ALTER TABLE `order_items`
+  ADD PRIMARY KEY (`order_item_id`),
+  ADD KEY `order_items_order_id_412ad78b_fk_orders_order_id` (`order_id`),
+  ADD KEY `order_items_product_id_dd557d5a_fk_products_product_id` (`product_id`);
+
+--
 -- Indexes for table `products`
 --
 ALTER TABLE `products`
@@ -384,7 +447,7 @@ ALTER TABLE `auth_group_permissions`
 -- AUTO_INCREMENT for table `auth_permission`
 --
 ALTER TABLE `auth_permission`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `auth_user`
@@ -408,7 +471,7 @@ ALTER TABLE `auth_user_user_permissions`
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `django_admin_log`
@@ -420,13 +483,25 @@ ALTER TABLE `django_admin_log`
 -- AUTO_INCREMENT for table `django_content_type`
 --
 ALTER TABLE `django_content_type`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `django_migrations`
 --
 ALTER TABLE `django_migrations`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+
+--
+-- AUTO_INCREMENT for table `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `order_items`
+--
+ALTER TABLE `order_items`
+  MODIFY `order_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -477,6 +552,13 @@ ALTER TABLE `carts`
 ALTER TABLE `django_admin_log`
   ADD CONSTRAINT `django_admin_log_content_type_id_c4bce8eb_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
   ADD CONSTRAINT `django_admin_log_user_id_c564eba6_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`);
+
+--
+-- Constraints for table `order_items`
+--
+ALTER TABLE `order_items`
+  ADD CONSTRAINT `order_items_order_id_412ad78b_fk_orders_order_id` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`),
+  ADD CONSTRAINT `order_items_product_id_dd557d5a_fk_products_product_id` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

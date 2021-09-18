@@ -28,7 +28,7 @@
                         <td>{{ item.qty }}</td>
                         <td>{{ item.price }}</td>
                         <td>
-                            
+                            <a href="{% url 'shop:cart-remove' pk=item.cart_id %}" class="btn btn-danger">Remove</a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -39,6 +39,10 @@
             {% endif %}
         </tbody>
     </table>
+
+    <div class="mt-10">
+        <a href="{% url 'shop:checkout' %}" class="btn btn-success" >Checkout</a>
+    </div>
 
 </div>
 
