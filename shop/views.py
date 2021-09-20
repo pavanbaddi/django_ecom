@@ -1,7 +1,8 @@
 from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from products.models import ProductModel
-from shop.models import CartModel, OrderModel
+from shop.models import CartModel
+from orders.models import OrderModel
 from django.contrib import messages
 from django.urls import reverse
 import razorpay
@@ -32,7 +33,8 @@ def buy_now(request, pk):
 def carts(request):
 
     info = {
-        "list" : CartModel.objects.filter()
+        "list" : CartModel.objects.filter(),
+        "cart" : CartModel()
     }
 
     return render(request, 'shop/cart.html', info )
@@ -50,7 +52,7 @@ def cart_remove(request, pk ):
 def checkout(request):
 
     info = {
-        "total_price" : 3000,
+        "total_price" : ( ( CartModel() ).total_price() )*100,
         "razorpay" : {
             'key' : 'rzp_test_bItQGvIlkLU9B9',
             'secret' : 'Whpz5vK6sTBtENwSThFJIeSc',

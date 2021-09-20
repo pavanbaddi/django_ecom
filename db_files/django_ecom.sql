@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Sep 18, 2021 at 07:13 AM
+-- Generation Time: Sep 20, 2021 at 07:51 AM
 -- Server version: 5.7.24
 -- PHP Version: 7.3.23
 
@@ -122,6 +122,14 @@ CREATE TABLE `auth_user` (
   `is_active` tinyint(1) NOT NULL,
   `date_joined` datetime(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `auth_user`
+--
+
+INSERT INTO `auth_user` (`id`, `password`, `last_login`, `is_superuser`, `username`, `first_name`, `last_name`, `email`, `is_staff`, `is_active`, `date_joined`) VALUES
+(1, 'pbkdf2_sha256$260000$VpUD51v5Hp54rz5Woztyr3$Wm1osA3yPJkUBnKu28Gbb7XpBwYk+DZtXIFHkrtKhag=', '2021-09-20 07:46:17.350405', 0, 'kunal123', 'Kunal', 'Patil', 'kunal123@g.com', 0, 1, '2021-09-20 07:30:26.856956'),
+(2, 'pbkdf2_sha256$260000$PcPR7XPGPo0Eo4FglJDghW$vvw39Xb5sTGj+JWzdeSTF1gbf8QqlSSOqJndh1WPXvw=', '2021-09-20 07:46:54.542032', 0, 'p123', 'prakash', 'patil', 'p@g.com', 0, 1, '2021-09-20 07:46:42.449264');
 
 -- --------------------------------------------------------
 
@@ -243,7 +251,9 @@ INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
 (19, 'products', '0001_initial', '2021-09-16 07:14:07.745386'),
 (20, 'shop', '0001_initial', '2021-09-17 07:07:55.461951'),
 (21, 'shop', '0002_rename_product_id_cartmodel_product', '2021-09-17 07:14:53.641286'),
-(22, 'shop', '0003_orderitemmodel_ordermodel', '2021-09-18 07:04:30.289273');
+(22, 'shop', '0003_orderitemmodel_ordermodel', '2021-09-18 07:04:30.289273'),
+(23, 'orders', '0001_initial', '2021-09-20 06:03:12.467383'),
+(24, 'shop', '0004_auto_20210920_1132', '2021-09-20 06:03:12.486312');
 
 -- --------------------------------------------------------
 
@@ -256,6 +266,14 @@ CREATE TABLE `django_session` (
   `session_data` longtext NOT NULL,
   `expire_date` datetime(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `django_session`
+--
+
+INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALUES
+('cuhwwk16jh3y5ze1q7xwm4okkyt0z4ag', '.eJxVjDEOwjAMRe-SGUWx65DAyM4ZKttJSQGlUtNOiLtDpQ6w_vfef5me16X0a8tzPyZzNmgOv5uwPnLdQLpzvU1Wp7rMo9hNsTtt9jql_Lzs7t9B4Va-dXYhRSIvKoEdKahCjOz4BNQpdiA5ixsGxHgMhOw8IHQcMQzgSdC8P-DMN0k:1mSE0s:39YuNCUdeLYQiRIUI1ZoGCGyP0SgO8EaXnmJF2MGOHc', '2021-10-04 07:46:54.551999'),
+('fzzjuq08etu7rwnloo6f6w80nv2jni9g', 'e30:1mSDvz:6GiaK4PCNRzd6JTc22nqqYMYYZmSNRIzYAX6gPIHqaY', '2021-10-04 07:41:51.737713');
 
 -- --------------------------------------------------------
 
@@ -278,7 +296,8 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`order_id`, `name`, `phone`, `address`, `payment_order_id`, `payment_id`, `delivery_desc`) VALUES
-(1, 'Kunal', '8892279412', 'sample addresss', 'pay_HyqCVNcGP31cvz', 'order_HyqBOdrWZPwwtb', NULL);
+(1, 'Kunal', '8892279412', 'sample addresss', 'pay_HyqCVNcGP31cvz', 'order_HyqBOdrWZPwwtb', NULL),
+(2, 'Sam', '8896696969', 'hubli', 'pay_HzcYTZuAOQC63p', 'order_HzcY0ORJRmzqmR', NULL);
 
 -- --------------------------------------------------------
 
@@ -300,7 +319,9 @@ CREATE TABLE `order_items` (
 --
 
 INSERT INTO `order_items` (`order_item_id`, `rate`, `qty`, `price`, `order_id`, `product_id`) VALUES
-(1, 25, 1, 25, 1, 4);
+(1, 25, 1, 25, 1, 4),
+(2, 55, 1, 55, 2, 5),
+(3, 25, 1, 25, 2, 4);
 
 -- --------------------------------------------------------
 
@@ -453,7 +474,7 @@ ALTER TABLE `auth_permission`
 -- AUTO_INCREMENT for table `auth_user`
 --
 ALTER TABLE `auth_user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `auth_user_groups`
@@ -489,19 +510,19 @@ ALTER TABLE `django_content_type`
 -- AUTO_INCREMENT for table `django_migrations`
 --
 ALTER TABLE `django_migrations`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `order_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `order_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `products`

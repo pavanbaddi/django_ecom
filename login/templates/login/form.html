@@ -1,0 +1,33 @@
+{% extends 'ecom/base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <h2 class="text-center">Login</h2>
+    
+    <div class="row">
+        <div class="col-md-4 offset-md-4">
+            <form action="{% url 'login:user' %}" method="post">
+                {% csrf_token %}
+                <div>
+                    <label for="">Username</label>
+                    <input type="text" name="username" class="form-control" value="{{ form.username.value }}" required>
+                    {% if form.username.errors %}
+                        {% for item in form.username.errors %}
+                            <label class="text-danger">{{ item }}</label>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div>
+                    <label for="">Password</label>
+                    <input type="password" name="password" class="form-control" value="{{ form.password.value }}" required>
+                </div>
+                <div class="mt-10" >
+                    <input type="submit" class="btn btn-success" value="Login" >
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
