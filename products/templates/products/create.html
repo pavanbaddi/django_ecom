@@ -1,11 +1,23 @@
+
 {% extends 'ecom/base.html' %}
 
+{% block css %}
+
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+{% endblock  %}
+
+
 {% block content %}
+{% load static %}
+
+
 
 <div class="row">
-    <div class="col-md-4 offset-md-4">
+    <div class="col-md-10 offset-md-1">
         <h2 class="text-center" >{% if form.product_id.value %} Edit {% else %} Create {% endif %} Product</h2>
-        <form action="{% url 'products:save' %}" method="post" >
+        <form action="{% url 'products:save' %}" method="post" enctype="multipart/form-data" >
             <input type="hidden" name="product_id" value="{{ form.product_id.value }}" />
             {% csrf_token %}
             <div>
@@ -16,6 +28,36 @@
                 <label>Product Price</label>
                 <input type="number" step="1" class="form-control" name="price" value="{{ form.price.value }}" required>
             </div>
+            <div>
+                <label>Description</label>
+                <textarea  class="form-control" name="content" id="content" >{{ form.content.value }}</textarea>
+            </div>
+            <div>
+                <label>Featured Image</label>
+                {% if form.featured_image_url.value %}
+                    <div>
+                        <!-- <img src="{# get_media_prefix #}/uploads/{ form.featured_image.value }" class="img-sm"  > -->
+                        <img src="{{form.featured_image_url.value}}" class="img-sm"  >
+                    </div>
+                {% endif %}
+                <input type="file" class="form-control" name="featured_image" >
+            </div>
+            <div>
+                <label>Slides</label>
+                <input type="file" class="form-control" name="path" multiple >
+
+                {% if slides %}
+                    <div class="row">
+                        {% for item in slides %}
+                            <div class="col-md-3">
+                                <img src="{{ item.path_url }}" class="img-full-h-200" >
+                                <a href="{% url 'products:remove-slide' pk=item.slide_id %}" class="btn btn-danger" >Delete</a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+            </div>
             <div class="mt-10" >
                 <input type="submit" class="btn btn-primary btn-block" value="Save">
             </div>
@@ -25,5 +67,13 @@
     </div>
 </div>
 
+
+<script>
+    $(document).ready(function() {
+        $('#content').summernote({
+            'height' : '400px'
+        });
+    });
+</script>
 
 {% endblock %}

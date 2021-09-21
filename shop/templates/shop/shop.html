@@ -1,14 +1,18 @@
 {% extends 'ecom/base.html' %}
 
 {% block content %}
-
+{% load static %}
 <div class="container">
     <h2 class="text-center" >Shop</h2>
     <div class="row" >
         {% for item in list %}
             <div class="col-md-3">
                 <div class="card" >
-                    <!-- <img src="..." class="card-img-top" alt="..."> -->
+                    {% if item.featured_image_url %}
+                        <img src="{{ item.featured_image_url }}" class="img-full-h-200"   >
+                    {% else %}
+                        <img src="{% get_media_prefix %}/not_found.png" class="img-full-h-200"   >
+                    {% endif %}
                     <div class="card-body">
                     <h5 class="card-title">{{ item.name }}</h5>
                     <p class="card-text">Price: <strong>{{ item.price }}</strong> </p>

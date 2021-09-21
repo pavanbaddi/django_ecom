@@ -20,15 +20,6 @@ def register_user(request):
 
     form = RegisterForm(request.POST)
 
-    print(form.errors.as_data())
-    # breakpoint()
-    # for i in form.errors:
-    #     print("i", i)
-    #     breakpoint()
-    #     for j in form.i.errors:
-    #         print("j", j)
-
-
     if form.is_valid():
         query = {
             "username" : form.cleaned_data["username"],

@@ -8,4 +8,5 @@ urlpatterns = [
     path( 'save', views.product_save, name="save" ),
     path( 'edit/<int:pk>', views.product_edit, name="edit" ),
     path( 'remove/<int:pk>', views.product_remove, name="remove" ),
+    path( 'remove-slide/<int:pk>', views.product_slide_remove, name="remove-slide" ),
 ]

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Sep 20, 2021 at 07:51 AM
+-- Generation Time: Sep 21, 2021 at 08:02 AM
 -- Server version: 5.7.24
 -- PHP Version: 7.3.23
 
@@ -101,7 +101,19 @@ INSERT INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALU
 (37, 'Can add order item model', 10, 'add_orderitemmodel'),
 (38, 'Can change order item model', 10, 'change_orderitemmodel'),
 (39, 'Can delete order item model', 10, 'delete_orderitemmodel'),
-(40, 'Can view order item model', 10, 'view_orderitemmodel');
+(40, 'Can view order item model', 10, 'view_orderitemmodel'),
+(41, 'Can add order model', 11, 'add_ordermodel'),
+(42, 'Can change order model', 11, 'change_ordermodel'),
+(43, 'Can delete order model', 11, 'delete_ordermodel'),
+(44, 'Can view order model', 11, 'view_ordermodel'),
+(45, 'Can add order item model', 12, 'add_orderitemmodel'),
+(46, 'Can change order item model', 12, 'change_orderitemmodel'),
+(47, 'Can delete order item model', 12, 'delete_orderitemmodel'),
+(48, 'Can view order item model', 12, 'view_orderitemmodel'),
+(49, 'Can add slide model', 13, 'add_slidemodel'),
+(50, 'Can change slide model', 13, 'change_slidemodel'),
+(51, 'Can delete slide model', 13, 'delete_slidemodel'),
+(52, 'Can view slide model', 13, 'view_slidemodel');
 
 -- --------------------------------------------------------
 
@@ -206,7 +218,10 @@ INSERT INTO `django_content_type` (`id`, `app_label`, `model`) VALUES
 (2, 'auth', 'permission'),
 (4, 'auth', 'user'),
 (5, 'contenttypes', 'contenttype'),
+(12, 'orders', 'orderitemmodel'),
+(11, 'orders', 'ordermodel'),
 (7, 'products', 'productmodel'),
+(13, 'products', 'slidemodel'),
 (6, 'sessions', 'session'),
 (8, 'shop', 'cartmodel'),
 (10, 'shop', 'orderitemmodel'),
@@ -253,7 +268,13 @@ INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
 (21, 'shop', '0002_rename_product_id_cartmodel_product', '2021-09-17 07:14:53.641286'),
 (22, 'shop', '0003_orderitemmodel_ordermodel', '2021-09-18 07:04:30.289273'),
 (23, 'orders', '0001_initial', '2021-09-20 06:03:12.467383'),
-(24, 'shop', '0004_auto_20210920_1132', '2021-09-20 06:03:12.486312');
+(24, 'shop', '0004_auto_20210920_1132', '2021-09-20 06:03:12.486312'),
+(25, 'products', '0002_productmodel_featured_image', '2021-09-21 06:29:54.532980'),
+(26, 'products', '0003_remove_productmodel_featured_image', '2021-09-21 06:30:37.096118'),
+(27, 'products', '0004_productmodel_featured_image', '2021-09-21 06:31:15.301675'),
+(28, 'products', '0005_slidemodel', '2021-09-21 07:31:55.445793'),
+(29, 'products', '0006_rename_product_id_slidemodel_product', '2021-09-21 07:31:55.574755'),
+(30, 'products', '0007_productmodel_content', '2021-09-21 07:50:55.298075');
 
 -- --------------------------------------------------------
 
@@ -332,17 +353,42 @@ INSERT INTO `order_items` (`order_item_id`, `rate`, `qty`, `price`, `order_id`, 
 CREATE TABLE `products` (
   `product_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `price` double NOT NULL
+  `price` double NOT NULL,
+  `featured_image` varchar(255) DEFAULT NULL,
+  `content` longtext
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`product_id`, `name`, `price`) VALUES
-(3, 'Head Phones', 300),
-(4, 'Toothbrush', 25),
-(5, 'Napkin', 55);
+INSERT INTO `products` (`product_id`, `name`, `price`, `featured_image`, `content`) VALUES
+(3, 'Head Phones', 300, NULL, NULL),
+(4, 'Toothbrush', 25, NULL, NULL),
+(5, 'Napkin', 55, NULL, NULL),
+(6, 'Valentine Olson', 550, 'f1330085-c9aa-434b-a50b-9516d3ae41cf.png', NULL),
+(7, 'Quyn Pennington', 843, '822063f0-fa2d-4893-8b5e-d8c69451f6e0.jpeg', '<p>None</p><p><br></p><p><iframe frameborder=\"0\" src=\"//www.youtube.com/embed/OyVWDF-_Ooo\" width=\"640\" height=\"360\" class=\"note-video-clip\"></iframe><br></p>');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `slides`
+--
+
+CREATE TABLE `slides` (
+  `slide_id` int(11) NOT NULL,
+  `path` varchar(255) NOT NULL,
+  `product_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `slides`
+--
+
+INSERT INTO `slides` (`slide_id`, `path`, `product_id`) VALUES
+(1, '2db5e232-af99-4000-a184-4583e816849a.jpeg', 7),
+(3, '72dd38aa-e871-4bda-bdcc-7753408ff739.jpeg', 7),
+(5, '8f791a85-754e-4cb8-b796-d3706e3a072e.jpeg', 7);
 
 --
 -- Indexes for dumped tables
@@ -449,6 +495,13 @@ ALTER TABLE `products`
   ADD PRIMARY KEY (`product_id`);
 
 --
+-- Indexes for table `slides`
+--
+ALTER TABLE `slides`
+  ADD PRIMARY KEY (`slide_id`),
+  ADD KEY `slides_product_id_cca92c74_fk_products_product_id` (`product_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -468,7 +521,7 @@ ALTER TABLE `auth_group_permissions`
 -- AUTO_INCREMENT for table `auth_permission`
 --
 ALTER TABLE `auth_permission`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- AUTO_INCREMENT for table `auth_user`
@@ -492,7 +545,7 @@ ALTER TABLE `auth_user_user_permissions`
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `django_admin_log`
@@ -504,13 +557,13 @@ ALTER TABLE `django_admin_log`
 -- AUTO_INCREMENT for table `django_content_type`
 --
 ALTER TABLE `django_content_type`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `django_migrations`
 --
 ALTER TABLE `django_migrations`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -528,7 +581,13 @@ ALTER TABLE `order_items`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `slides`
+--
+ALTER TABLE `slides`
+  MODIFY `slide_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
@@ -580,6 +639,12 @@ ALTER TABLE `django_admin_log`
 ALTER TABLE `order_items`
   ADD CONSTRAINT `order_items_order_id_412ad78b_fk_orders_order_id` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`),
   ADD CONSTRAINT `order_items_product_id_dd557d5a_fk_products_product_id` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`);
+
+--
+-- Constraints for table `slides`
+--
+ALTER TABLE `slides`
+  ADD CONSTRAINT `slides_product_id_cca92c74_fk_products_product_id` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
