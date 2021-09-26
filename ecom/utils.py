@@ -1,4 +1,5 @@
 import uuid
+from django.conf import settings
 
 def file_upload( file, path='media/uploads' ):
 
@@ -12,7 +13,7 @@ def file_upload( file, path='media/uploads' ):
         random = uuid.uuid4()
         extension = file.content_type.split("/")[1]
         new_file_name = f"{random}.{extension}"
-        destination_path = f"C:/Users/pavan/Desktop/python/ecom/{path}/{new_file_name}"
+        destination_path = f"{settings.BASE_DIR}/{path}/{new_file_name}"
 
         with open(destination_path, 'wb+') as destination:
             for chunk in file.chunks():
